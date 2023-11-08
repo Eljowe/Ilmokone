@@ -1,0 +1,8 @@
+/production-database-data
+.env
+
+project.env
+*.env
+./project.env
+
+/app-cache
