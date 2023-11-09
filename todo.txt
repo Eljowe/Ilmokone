@@ -9,6 +9,7 @@
 
 4. Admin control panel
     - Auth
+    - Delete, Create, Edit events
 
 5. Deploying
 

@@ -54,7 +54,7 @@ export default function Event({ params }: Props) {
         console.log(response[0]);
         setEvent({
           title: response[0].title,
-          description: response[0].description,
+          description: response[0].event_description,
           date: response[0].event_date,
           registration_start: response[0].registration_starts,
         });
