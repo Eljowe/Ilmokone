@@ -5,6 +5,15 @@ const handleGet = async (request) => {
   return Response.json(await registrationService.findAll());
 };
 
+const handleGetEvent = async (request, urlPatternResult) => {
+  const id = urlPatternResult.pathname.groups.id;
+  try {
+    return Response.json(await registrationService.findEvent(id));
+  } catch (e) {
+    return Response.json({ error: "no events by that id" });
+  }
+};
+
 const handleGetRegistered = async (request) => {
   return Response.json(await registrationService.findRegistered());
 };
@@ -34,6 +43,11 @@ const urlMapping = [
     method: "GET",
     pattern: new URLPattern({ pathname: "/" }),
     fn: handleGet,
+  },
+  {
+    method: "GET",
+    pattern: new URLPattern({ pathname: "/event/:id" }),
+    fn: handleGetEvent,
   },
   {
     method: "POST",

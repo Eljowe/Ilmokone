@@ -4,6 +4,10 @@ const findAll = async () => {
   return await sql`SELECT * FROM events;`;
 };
 
+const findEvent = async (event_id) => {
+  return await sql`SELECT * FROM events WHERE id=${event_id};`;
+};
+
 const register = async (content) => {
   try {
     if (!content) {
@@ -27,4 +31,4 @@ const findRegisteredForEvent = async (event_id) => {
   return await sql`SELECT * FROM event_registrations WHERE events_id = ${event_id};`;
 };
 
-export { findAll, register, findRegistered, findRegisteredForEvent };
+export { findAll, register, findRegistered, findRegisteredForEvent, findEvent };
