@@ -6,3 +6,6 @@ project.env
 ./project.env
 
 /app-cache
+node_modules
+
+.next
