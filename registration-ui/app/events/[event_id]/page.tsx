@@ -66,15 +66,14 @@ export default function Event({ params }: Props) {
         <Form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-start space-y-2">
           <TextField name="name" isRequired className="flex flex-col">
             <Label>Name</Label>
-            <input defaultValue="John Doe" {...register('name')} />
+            <Input {...register('name')} />
+            <FieldError />
           </TextField>
           <TextField name="email" type="email" isRequired className="flex flex-col">
             <Label>Email</Label>
-            <input {...register('email', { required: true })} />
+            <Input {...register('email')} />
+            <FieldError />
           </TextField>
-
-          {errors.email && <span>This field is required</span>}
-
           <Button type="submit">Submit</Button>
         </Form>
       </div>

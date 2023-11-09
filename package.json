@@ -2,5 +2,8 @@
   "devDependencies": {
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.7"
+  },
+  "dependencies": {
+    "react-hook-form": "^7.48.2"
   }
 }
