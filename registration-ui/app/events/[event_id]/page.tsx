@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, FieldError, Form, Input, Label, TextField } from 'react-aria-components';
+import CountdownTimer from './components/CountdownTimer';
 
 type Props = {
   params: {
@@ -25,10 +26,11 @@ interface Event {
 export default function Event({ params }: Props) {
   const slug = params.event_id;
   const [event, setEvent] = useState<Event | null>({
-    description: 'first event',
-    title: 'First',
-    date: 'today',
-    registration_start: 'tomorrow',
+    description:
+      'Join us for an exciting day of innovation and collaboration at the TechXperience Summit 2023. This event brings together thought leaders, industry experts, and enthusiasts to explore the latest trends in technology and discuss the future of innovation.',
+    title: 'TechXperience Summit 2023',
+    date: '2023-11-15 09:00:00',
+    registration_start: '2023-09-01 00:00:00',
   });
 
   const {
@@ -60,10 +62,19 @@ export default function Event({ params }: Props) {
   }, [slug]);
 
   return (
-    <main className="flex h-screen w-screen items-center justify-center">
-      <div className="flex h-3/4 w-3/4 flex-col items-center justify-center rounded-xl bg-blue-50 p-4">
-        {event ? <h1>{event.title}</h1> : <h1>No event</h1>}
-        <Form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-start space-y-2">
+    <main className="flex min-h-screen w-screen items-start justify-center p-4">
+      <div className="flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 divide-y-2 rounded-xl bg-blue-50 px-4 py-20 sm:px-10">
+        {event ? (
+          <div className="w-max-[800px] flex flex-col space-y-4">
+            <h1 className="text-2xl font-bold">{event.title}</h1>
+            <p>{event.description}</p>
+            <p>Registration for the event starts: {event.registration_start}</p>
+            <CountdownTimer start_time={event.date} />
+          </div>
+        ) : (
+          <h1>No event</h1>
+        )}
+        <Form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col items-center space-y-4 pt-10">
           <TextField name="name" isRequired className="flex flex-col">
             <Label>Name</Label>
             <Input {...register('name')} />
@@ -76,6 +87,7 @@ export default function Event({ params }: Props) {
           </TextField>
           <Button type="submit">Submit</Button>
         </Form>
+        {event?.participants && <p>Participants</p>}
       </div>
     </main>
   );

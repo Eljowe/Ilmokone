@@ -5,14 +5,3 @@
 body {
   font-family: 'Arimo', sans-serif;
 }
-
-.react-aria-TextField .react-aria-Input,
-.react-aria-TextField .react-aria-TextArea {
-  border: 1px solid black;
-  background: white;
-  color: black;
-  border-radius: 6px;
-  margin: 0;
-  padding: 0.286rem;
-  font-size: 1.143rem;
-}

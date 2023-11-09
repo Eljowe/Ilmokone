@@ -1,0 +1,15 @@
+1. Language support for at least EN/FIN
+    - Use i18n
+
+2. Registration mechanics
+    - Registration start time check
+    - Data integrity check
+
+3. Form options
+
+4. Admin control panel
+    - Auth
+
+5. Deploying
+
+ 
