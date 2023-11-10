@@ -63,7 +63,7 @@ export default function Event({ params }: Props) {
 
   return (
     <main className="flex min-h-screen w-screen items-start justify-center p-4">
-      <div className="flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 divide-y-2 rounded-xl bg-blue-50 px-4 py-20 sm:px-10">
+      <div className="flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 divide-y-2 rounded-xl bg-gray-50 px-4 py-20 sm:px-10">
         {event ? (
           <div className="w-max-[800px] flex flex-col space-y-4">
             <h1 className="text-2xl font-bold">{event.title}</h1>
