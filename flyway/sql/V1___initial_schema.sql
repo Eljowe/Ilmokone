@@ -4,7 +4,8 @@ CREATE TABLE events (
   event_description TEXT NOT NULL,
   options TEXT,
   event_date TEXT NOT NULL,
-  registration_starts TEXT NOT NULL
+  registration_starts TEXT NOT NULL,
+  event_location TEXT
 );
 
 CREATE TABLE event_registrations (

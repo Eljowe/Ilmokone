@@ -68,7 +68,7 @@ export default function Event({ params }: Props) {
           <div className="w-max-[800px] flex flex-col space-y-4">
             <h1 className="text-2xl font-bold">{event.title}</h1>
             <p>{event.description}</p>
-            <p>Registration for the event starts: {event.registration_start}</p>
+            <p className="text-normal text-gray-500">Registration for the event starts: {event.registration_start}</p>
             <CountdownTimer start_time={event.registration_start} />
           </div>
         ) : (
