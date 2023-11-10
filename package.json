@@ -4,6 +4,9 @@
     "prettier-plugin-tailwindcss": "^0.5.7"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "react-hook-form": "^7.48.2"
   }
 }

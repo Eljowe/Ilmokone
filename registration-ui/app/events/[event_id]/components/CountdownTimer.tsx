@@ -52,7 +52,7 @@ const CountdownTimer = ({ start_time }: Props) => {
 
   if (timeRemaining.days > 0 || timeRemaining.hours > 0 || timeRemaining.minutes > 0 || timeRemaining.seconds > 0) {
     return (
-      <div className="mx-auto flex flex-row space-x-8 font-bold text-slate-700">
+      <div className="max-w-screen mx-auto flex flex-col justify-between font-bold text-slate-700">
         <h3>Registration starts in:</h3>
         {timeRemaining.days > 0 && <p>{timeRemaining.days} days</p>}
         <p>{timeRemaining.hours} hours</p>
