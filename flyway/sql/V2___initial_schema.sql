@@ -2,4 +2,6 @@ INSERT INTO events (title, event_description, event_date, registration_starts, e
 
 INSERT INTO events (title, event_description, event_date, registration_starts, event_location) VALUES ('TWO_Event_TM', 'Second event!', '2023-11-15 09:00:00', '2023-11-13 14:00:00', 'JMT 5');
 
-INSERT INTO event_registrations (events_id, participant_name, email) VALUES (2, 'John Doe', 'john.doe@email.com')
+INSERT INTO event_registrations (events_id, participant_name, email) VALUES (2, 'John Doe', 'john.doe@email.com');
+
+INSERT INTO admins (email, password) VALUES ('admin@admin.com', '$2a$10$k5.EIqPBAZqdp4tP48mw0eZDcrkEJnK.Maoa2Ow8hmzCtW6YmTGuG');

@@ -62,9 +62,11 @@ const registerUser = async ({ request, response, render }) => {
   const [passes, errors] = await validasaur.validate(data, registrationValidationRules);
   if (passes) {
     await userService.addUser(params.get('email'), await bcrypt.hash(params.get('password')));
-    response.redirect('/auth/login');
+    response.status = 200;
+    response.body = 'success';
   } else {
-    render('registration.eta', { errors: errors });
+    response.status = 401;
+    response.body = 'error';
   }
 };
 

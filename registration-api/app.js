@@ -6,9 +6,9 @@ import { adminMiddleware } from './middlewares/adminMiddleware.js';
 import { Snelm } from './deps.js';
 import { green, yellow } from 'https://deno.land/std@0.53.0/fmt/colors.ts';
 import registrationRouter from './routes/registration.js';
+import { Session, RedisStore, connect } from './deps.js';
 
 const app = new Application();
-
 const snelm = new Snelm('oak');
 
 app.use(async (ctx, next) => {

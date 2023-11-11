@@ -8,6 +8,7 @@ import {
   handleGetRegistered,
   handleGetRegisteredForEventId,
 } from '../controllers/registrationController.js';
+import { processLogin } from '../controllers/loginController.js';
 
 router
   .get('/', ctx => {
@@ -37,6 +38,13 @@ router
     return handleGetRegisteredForEventId({
       id: id,
       response: ctx.response,
+    });
+  })
+  .post('/login', ctx => {
+    return processLogin({
+      response: ctx.response,
+      request: ctx.request,
+      session: ctx.session,
     });
   });
 

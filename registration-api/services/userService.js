@@ -8,8 +8,7 @@ const addUser = async (email, password) => {
 
 const findUserByEmail = async email => {
   const result = await sql`SELECT * FROM admins WHERE email = ${email};`;
-
-  return result.rows;
+  return result;
 };
 
 export { addUser, findUserByEmail };
