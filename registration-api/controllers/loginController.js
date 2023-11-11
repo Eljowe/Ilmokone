@@ -1,7 +1,7 @@
 import * as userService from '../services/userService.js';
 import { bcrypt } from '../deps.js';
 
-const processLogin = async ({ request, response, session }) => {
+const processLogin = async ({ request, response, state }) => {
   try {
     const body = request.body({ type: 'json' });
     const params = await body.value;
@@ -18,14 +18,13 @@ const processLogin = async ({ request, response, session }) => {
     }
     const user = userFromDatabase[0];
     const passwordMatches = await bcrypt.compare(params.password, user.password);
-    console.log(session);
     if (!passwordMatches) {
       response.status = 401;
       response.body = 'login error at password';
       return;
     }
 
-    await session.set('user', user);
+    state.session.user = user;
     response.status = 200;
     response.body = 'authorized';
     return;

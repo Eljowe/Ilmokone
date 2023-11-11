@@ -44,7 +44,7 @@ router
     return processLogin({
       response: ctx.response,
       request: ctx.request,
-      session: ctx.session,
+      state: ctx.state,
     });
   });
 

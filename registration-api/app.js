@@ -6,10 +6,15 @@ import { adminMiddleware } from './middlewares/adminMiddleware.js';
 import { Snelm } from './deps.js';
 import { green, yellow } from 'https://deno.land/std@0.53.0/fmt/colors.ts';
 import registrationRouter from './routes/registration.js';
-import { Session, RedisStore, connect } from './deps.js';
+import { Session, PostgresStore } from 'https://deno.land/x/oak_sessions/mod.ts';
+import { sql } from './database/database.js';
 
 const app = new Application();
 const snelm = new Snelm('oak');
+
+const store = new PostgresStore(sql, 'session_table');
+await store.initSessionsTable();
+app.use(Session.initMiddleware(store));
 
 app.use(async (ctx, next) => {
   ctx.response = snelm.snelm(ctx.request, ctx.response);
