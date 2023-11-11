@@ -1,16 +1,13 @@
-import { executeQuery } from '../database/database.js';
+import { sql } from '../database/database.js';
 
 const addUser = async (email, password) => {
-  await executeQuery(
-    `INSERT INTO admins
+  await sql`INSERT INTO admins
       (email, password)
-        VALUES ($email, $password)`,
-    { email: email, password: password }
-  );
+        VALUES (${email}, ${password})`;
 };
 
 const findUserByEmail = async email => {
-  const result = await executeQuery('SELECT * FROM admins WHERE email = $email', { email: email });
+  const result = await sql`SELECT * FROM admins WHERE email = ${email};`;
 
   return result.rows;
 };
