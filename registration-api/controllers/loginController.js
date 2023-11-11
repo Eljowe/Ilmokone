@@ -24,7 +24,7 @@ const processLogin = async ({ request, response, state }) => {
       return;
     }
 
-    state.session.user = user;
+    state.session.set('user', user);
     response.status = 200;
     response.body = 'authorized';
     return;

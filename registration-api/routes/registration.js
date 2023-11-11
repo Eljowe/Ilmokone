@@ -9,6 +9,7 @@ import {
   handleGetRegisteredForEventId,
 } from '../controllers/registrationController.js';
 import { processLogin } from '../controllers/loginController.js';
+import { checkAuth, logout } from '../controllers/authController.js';
 
 router
   .get('/', ctx => {
@@ -42,6 +43,20 @@ router
   })
   .post('/login', ctx => {
     return processLogin({
+      response: ctx.response,
+      request: ctx.request,
+      state: ctx.state,
+    });
+  })
+  .get('/auth', ctx => {
+    return checkAuth({
+      response: ctx.response,
+      request: ctx.request,
+      state: ctx.state,
+    });
+  })
+  .get('/logout', ctx => {
+    return logout({
       response: ctx.response,
       request: ctx.request,
       state: ctx.state,
