@@ -1,8 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   useEffect(() => {
     try {
       fetch('/api/logout');
@@ -10,8 +11,8 @@ export default function Page() {
       console.error('Error:', error);
       // Handle errors
     }
-    redirect('/admin');
-  }, []);
+    router.push('/admin');
+  }, [router]);
 
-  return <p>a</p>;
+  return <p>Logging out...</p>;
 }

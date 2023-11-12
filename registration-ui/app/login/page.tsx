@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, FieldError, Form, Input, Label, TextField } from 'react-aria-components';
+import { useRouter } from 'next/navigation';
 
 type Inputs = {
   password: string;
@@ -10,21 +11,21 @@ type Inputs = {
 
 export default function Page() {
   const [authorized, setAuthorized] = useState<Boolean>(false);
-
+  const router = useRouter();
   useEffect(() => {
     try {
       // Assuming 'data' is the JSON object you want to send
       fetch('/api/auth').then(response => {
-        console.log(response);
         if (response.status == 200) {
           setAuthorized(true);
+          router.push('/admin');
         }
       });
     } catch (error) {
       console.error('Error:', error);
       // Handle errors
     }
-  }, []);
+  }, [router]);
 
   const {
     register,
@@ -34,7 +35,6 @@ export default function Page() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
-    console.log(data);
     try {
       const response = await fetch('http://localhost:7800/api/login', {
         method: 'POST',
@@ -43,29 +43,15 @@ export default function Page() {
         },
         body: JSON.stringify(data),
       });
-      console.log(response);
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      console.log(response.status);
+      if (response.status == 200) {
+        router.push('/admin');
       }
-
-      const responseData = await response.json();
-      console.log(responseData);
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  if (authorized) {
-    return (
-      <div className="min-h-screen w-screen p-4">
-        <div>
-          <h1>Hello</h1>
-          <p>You are logged in</p>
-        </div>
-      </div>
-    );
-  }
   return (
     <div>
       <h1>Not authorized</h1>

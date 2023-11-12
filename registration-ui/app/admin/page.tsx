@@ -1,23 +1,26 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const [authorized, setAuthorized] = useState<Boolean>(false);
-
+  const router = useRouter();
   useEffect(() => {
     try {
       // Assuming 'data' is the JSON object you want to send
       fetch('/api/auth').then(response => {
-        console.log(response);
         if (response.status == 200) {
+          console.log(response.status);
           setAuthorized(true);
+        } else {
+          router.push('/login');
         }
       });
     } catch (error) {
       console.error('Error:', error);
       // Handle errors
     }
-  }, []);
+  }, [router]);
 
   if (authorized) {
     return (
@@ -29,9 +32,4 @@ export default function Page() {
       </div>
     );
   }
-  return (
-    <div>
-      <h1>Not authorized</h1>
-    </div>
-  );
 }

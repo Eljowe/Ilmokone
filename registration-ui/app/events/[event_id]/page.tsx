@@ -47,7 +47,6 @@ export default function Event({ params }: Props) {
       fetch(`http://localhost:7800/api/event/${slug}`)
         .then(response => response.json())
         .then(response => {
-          console.log(response[0]);
           setEvent({
             title: response[0].title,
             description: response[0].event_description,
@@ -76,19 +75,29 @@ export default function Event({ params }: Props) {
               <span>Registration starts: {event.date}</span>
             </div>
           </div>
-          <Form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col items-center space-y-4 pt-10">
-            <TextField name="name" isRequired className="flex flex-col">
-              <Label>Name</Label>
-              <Input {...register('name')} />
-              <FieldError />
-            </TextField>
-            <TextField name="email" type="email" isRequired className="flex flex-col">
-              <Label>Email</Label>
-              <Input {...register('email')} />
-              <FieldError />
-            </TextField>
-            <Button type="submit">Submit</Button>
-          </Form>
+          <div className="flex w-full items-center">
+            <Form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex w-[300px] flex-col space-y-4 pt-10">
+              <TextField name="name" isRequired className="flex flex-col">
+                <Label>Name</Label>
+                <Input
+                  {...register('name')}
+                  className="focus:shadow-outline w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
+                />
+                <FieldError />
+              </TextField>
+              <TextField name="email" type="email" isRequired className="flex flex-col">
+                <Label>Email</Label>
+                <Input
+                  {...register('email')}
+                  className="focus:shadow-outline w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
+                />
+                <FieldError />
+              </TextField>
+              <Button type="submit" className="cursor w-20 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-400">
+                Submit
+              </Button>
+            </Form>
+          </div>
           {event?.participants && <p>Participants</p>}
         </div>
       ) : (
