@@ -39,8 +39,8 @@ services:
 
   registration-ui:
     build:
-      context: registration-ui # Assuming your Next.js app code is in a 'web' directory
-      dockerfile: Dockerfile # Make sure to have a Dockerfile in your 'web' directory
+      context: registration-ui
+      dockerfile: Dockerfile
     image: registration-ui
     restart: 'no'
     volumes:

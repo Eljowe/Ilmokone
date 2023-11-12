@@ -8,9 +8,11 @@ import { green, yellow } from 'https://deno.land/std@0.53.0/fmt/colors.ts';
 import registrationRouter from './routes/registration.js';
 import { Session, PostgresStore } from 'https://deno.land/x/oak_sessions/mod.ts';
 import { sql } from './database/database.js';
+import { oakCors } from 'https://deno.land/x/cors/mod.ts';
 
 const app = new Application();
 const snelm = new Snelm('oak');
+app.use(oakCors({ origin: 'http://localhost:3000' }));
 
 const store = new PostgresStore(sql, 'session_table');
 await store.initSessionsTable();

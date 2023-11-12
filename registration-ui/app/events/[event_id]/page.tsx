@@ -22,11 +22,13 @@ interface Event {
   date: string;
   registration_start: string;
   event_location?: string;
+  maximum_participants?: number;
 }
 
 export default function Event({ params }: Props) {
   const slug = params.event_id;
   const [event, setEvent] = useState<Event | null>(null);
+  const [registrationHasStarted, setRegistrationHasStarted] = useState<Boolean>(false);
 
   const {
     register,
@@ -44,7 +46,7 @@ export default function Event({ params }: Props) {
       'get event data here, then if none, show error page, otherwise registration form if the event registration has started.'
     );
     try {
-      fetch(`http://localhost:7800/api/event/${slug}`)
+      fetch(`/api/event/${slug}`)
         .then(response => response.json())
         .then(response => {
           setEvent({
@@ -73,30 +75,41 @@ export default function Event({ params }: Props) {
               <span>When: {event.date}</span>
               <span>Where: {event.event_location}</span>
               <span>Registration starts: {event.date}</span>
+              <CountdownTimer start_time={event.registration_start} />
             </div>
           </div>
-          <div className="flex w-full items-center">
-            <Form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex w-[300px] flex-col space-y-4 pt-10">
-              <TextField name="name" isRequired className="flex flex-col">
-                <Label>Name</Label>
-                <Input
-                  {...register('name')}
-                  className="focus:shadow-outline w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
-                />
-                <FieldError />
-              </TextField>
-              <TextField name="email" type="email" isRequired className="flex flex-col">
-                <Label>Email</Label>
-                <Input
-                  {...register('email')}
-                  className="focus:shadow-outline w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
-                />
-                <FieldError />
-              </TextField>
-              <Button type="submit" className="cursor w-20 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-400">
-                Submit
-              </Button>
-            </Form>
+
+          <div className="flex w-full items-center justify-center">
+            {new Date(event.registration_start).getTime() <= new Date().getTime() ? (
+              <Form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex w-[300px] flex-col space-y-4 pt-10">
+                <TextField name="name" isRequired className="flex flex-col">
+                  <Label>Name</Label>
+                  <Input
+                    placeholder="Name"
+                    {...register('name')}
+                    className="focus:shadow-outline w-full appearance-none rounded border border-zinc-300  px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
+                  />
+                  <FieldError />
+                </TextField>
+                <TextField name="email" type="email" isRequired className="flex flex-col">
+                  <Label>Email</Label>
+                  <Input
+                    placeholder="user@email.com"
+                    {...register('email')}
+                    className="focus:shadow-outline w-full appearance-none rounded border border-zinc-300  px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
+                  />
+                  <FieldError />
+                </TextField>
+                <Button
+                  type="submit"
+                  className="cursor w-20 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-400"
+                >
+                  Submit
+                </Button>
+              </Form>
+            ) : (
+              <p className="pt-10">Registration has not started yet</p>
+            )}
           </div>
           {event?.participants && <p>Participants</p>}
         </div>

@@ -12,7 +12,7 @@ import { processLogin } from '../controllers/loginController.js';
 import { checkAuth, logout } from '../controllers/authController.js';
 
 router
-  .get('/', ctx => {
+  .get('/events', ctx => {
     return handleGet({
       response: ctx.response,
     });

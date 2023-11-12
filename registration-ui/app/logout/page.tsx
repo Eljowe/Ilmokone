@@ -11,7 +11,7 @@ export default function Page() {
       console.error('Error:', error);
       // Handle errors
     }
-    router.push('/admin');
+    router.push('/login');
   }, [router]);
 
   return <p>Logging out...</p>;

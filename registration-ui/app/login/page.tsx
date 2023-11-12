@@ -12,13 +12,14 @@ type Inputs = {
 export default function Page() {
   const [authorized, setAuthorized] = useState<Boolean>(false);
   const router = useRouter();
+  const [errorMsg, setErrorMsg] = useState<String | null>(null);
   useEffect(() => {
     try {
       // Assuming 'data' is the JSON object you want to send
-      fetch('/api/auth').then(response => {
+      fetch('http://localhost:7800/api/auth').then(response => {
         if (response.status == 200) {
           setAuthorized(true);
-          router.push('/admin');
+          router.push('http://localhost:7800/admin');
         }
       });
     } catch (error) {
@@ -36,7 +37,7 @@ export default function Page() {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
-      const response = await fetch('http://localhost:7800/api/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,25 +50,42 @@ export default function Page() {
       }
     } catch (error) {
       console.error('Error:', error);
+      setErrorMsg('login failed');
     }
   };
 
+  if (authorized) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <h1>Logged in, redirecting...</h1>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <h1>Not authorized</h1>
-      <Form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col items-center space-y-4 pt-10">
+    <div className="flex h-screen w-full flex-col items-center justify-center">
+      <Form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex w-[300px] flex-col space-y-4 pt-10">
         <TextField name="email" type="email" isRequired className="flex flex-col">
           <Label>Name</Label>
-          <Input {...register('email')} className="bg-gray-300" />
+          <Input
+            {...register('email')}
+            className="focus:shadow-outline w-full appearance-none rounded border border-zinc-300  px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
+          />
           <FieldError />
         </TextField>
         <TextField name="password" type="password" isRequired className="flex flex-col">
           <Label>Email</Label>
-          <Input {...register('password')} className="bg-gray-300" />
+          <Input
+            {...register('password')}
+            className="focus:shadow-outline w-full appearance-none rounded border border-zinc-300  px-4 py-2 leading-tight text-gray-700 transition duration-150 ease-in-out focus:border-blue-400 focus:outline-none"
+          />
           <FieldError />
         </TextField>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="cursor w-20 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-400">
+          Login
+        </Button>
       </Form>
+      {errorMsg && <p>{errorMsg}</p>}
     </div>
   );
 }

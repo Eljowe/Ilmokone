@@ -5,7 +5,8 @@ CREATE TABLE events (
   alcohol_options BOOLEAN DEFAULT TRUE,
   event_date TEXT NOT NULL,
   registration_starts TEXT NOT NULL,
-  event_location TEXT
+  event_location TEXT,
+  maximum_participants INTEGER
 );
 
 CREATE TABLE event_registrations (
