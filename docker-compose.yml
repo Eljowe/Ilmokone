@@ -42,7 +42,7 @@ services:
       context: registration-ui
       dockerfile: Dockerfile
     image: registration-ui
-    restart: 'no'
+    restart: 'always'
     volumes:
       - ./registration-ui/:/app
       - next_node_modules:/app/node_modules

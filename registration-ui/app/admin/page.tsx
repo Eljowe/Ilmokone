@@ -57,7 +57,7 @@ export default function Page() {
               <div key={event.title} className="flex w-full">
                 <div className="mx-auto flex w-full max-w-[500px] flex-row justify-between">
                   <h1>{event.title}</h1>
-                  <button className="cursor w-20 transform rounded bg-blue-500 px-4 py-2 text-white duration-500 hover:bg-blue-400">
+                  <button className="cursor w-20 transform rounded bg-blue-500 px-4 py-2 text-black duration-500 hover:bg-blue-400">
                     Edit
                   </button>
                 </div>
