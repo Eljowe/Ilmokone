@@ -9,3 +9,5 @@ project.env
 node_modules
 
 .next
+
+/registration-ui/build
