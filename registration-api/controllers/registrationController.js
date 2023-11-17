@@ -52,8 +52,8 @@ const handleGetRegisteredForEventId = async ({ response, id }) => {
   }
 };
 
-const registerUser = async ({ request, response, render }) => {
-  const body = request.body({ type: 'form' });
+const registerUser = async ({ request, response, state }) => {
+  const body = request.body({ type: 'json' });
   const params = await body.value;
   const data = {
     email: params.get('email'),
@@ -70,4 +70,41 @@ const registerUser = async ({ request, response, render }) => {
   }
 };
 
-export { registerUser, handleGet, handleGetEvent, handleGetRegistered, handleGetRegisteredForEventId };
+const handleCreateEvent = async ({ request, response, state }) => {
+  if (!state.session.get('user')) {
+    response.status = 401;
+    response.body = 'unauthorized';
+    return;
+  } else {
+    response.status = 200;
+    response.body = 'authorized';
+  }
+  const body = request.body({ type: 'json' });
+  const params = await body.value;
+  const data = {
+    title: params.get('title'),
+    event_description: params.get('event_description'),
+    alcohol_options: params.get('alcohol_options'),
+    event_date: params.get('event_date'),
+    registration_starts: params.get('registration_starts'),
+    event_location: params.get('event_location'),
+    maximum_participants: params.get('maximum_participants'),
+  };
+  try {
+    await userService.addEvent(data);
+    response.status = 200;
+    response.body = 'success';
+  } catch (e) {
+    response.status = 401;
+    response.body = 'error';
+  }
+};
+
+export {
+  registerUser,
+  handleGet,
+  handleGetEvent,
+  handleGetRegistered,
+  handleGetRegisteredForEventId,
+  handleCreateEvent,
+};

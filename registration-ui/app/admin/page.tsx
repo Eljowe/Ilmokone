@@ -52,6 +52,14 @@ export default function Page() {
         <div className="flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 divide-y-2 rounded-xl bg-gray-50 px-4 py-20 sm:px-10">
           <h1 className="text-2xl">Events control panel</h1>
           <div className="flex w-full flex-col space-y-4 pt-4">
+            <div className="mx-auto flex w-full max-w-[500px] flex-row justify-between p-2">
+              <a
+                href="/admin/new"
+                className="cursor w-30 mx-auto transform rounded bg-green-500 px-4 py-2 text-center text-white duration-500 hover:bg-green-400"
+              >
+                New event
+              </a>
+            </div>
             {events &&
               events.map(event => (
                 <div

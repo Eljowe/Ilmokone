@@ -75,21 +75,25 @@ export default function Event({ params }: Props) {
   if (authorized) {
     return (
       <main className="flex min-h-screen w-screen flex-col items-center justify-start p-4">
-        <h1 className="text-2xl font-bold">Admin view</h1>
         {event ? (
-          <div className="flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 divide-y-2 rounded-xl bg-gray-50 px-4 py-20 sm:px-10">
+          <div className="relative flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 rounded-xl bg-gray-50 px-4 py-20 sm:px-10">
+            <a
+              href="/admin"
+              className="absolute left-0 top-0 m-4 w-20 transform cursor-pointer text-center text-blue-500 underline duration-500"
+            >
+              Back
+            </a>
             <h1 className="text-2xl font-bold">{event.title}</h1>
             <div className="flex w-full flex-col justify-center space-y-4 pt-10 sm:flex-row sm:space-x-4 sm:space-y-0">
-              <div className="w-max-[800px] flex flex-col space-y-4 rounded-xl hover:border hover:border-blue-500 sm:w-full sm:min-w-[300px]">
+              <div className="w-max-[800px] flex flex-col space-y-4 rounded-xl p-4 hover:border hover:border-blue-500 sm:w-full sm:min-w-[300px]">
                 <p>{event.description}</p>
               </div>
-              <div className="flex w-min flex-col justify-between rounded-xl border border-zinc-400 p-4 hover:border-blue-500 sm:w-full">
+              <div className="flex w-full flex-col justify-between rounded-xl border border-zinc-400 p-4 hover:border-blue-500 sm:w-full">
                 <span>When: {event.date}</span>
                 <span>Where: {event.event_location}</span>
                 <span>Registration starts: {event.date}</span>
               </div>
             </div>
-
             <div className="flex w-full items-center justify-center">
               <Form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex w-[300px] flex-col space-y-4 pt-10">
                 <TextField name="name" isRequired className="flex flex-col">
