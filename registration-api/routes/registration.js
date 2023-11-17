@@ -7,6 +7,7 @@ import {
   handleGetEvent,
   handleGetRegistered,
   handleGetRegisteredForEventId,
+  handleCreateEvent,
 } from '../controllers/registrationController.js';
 import { processLogin } from '../controllers/loginController.js';
 import { checkAuth, logout } from '../controllers/authController.js';
@@ -57,6 +58,13 @@ router
   })
   .get('/logout', ctx => {
     return logout({
+      response: ctx.response,
+      request: ctx.request,
+      state: ctx.state,
+    });
+  })
+  .post('/addEvent', ctx => {
+    return handleCreateEvent({
       response: ctx.response,
       request: ctx.request,
       state: ctx.state,

@@ -70,33 +70,55 @@ const registerUser = async ({ request, response, state }) => {
   }
 };
 
+const baseDir = '../images';
+
 const handleCreateEvent = async ({ request, response, state }) => {
   if (!state.session.get('user')) {
     response.status = 401;
     response.body = 'unauthorized';
     return;
-  } else {
-    response.status = 200;
-    response.body = 'authorized';
   }
-  const body = request.body({ type: 'json' });
-  const params = await body.value;
-  const data = {
-    title: params.get('title'),
-    event_description: params.get('event_description'),
-    alcohol_options: params.get('alcohol_options'),
-    event_date: params.get('event_date'),
-    registration_starts: params.get('registration_starts'),
-    event_location: params.get('event_location'),
-    maximum_participants: params.get('maximum_participants'),
-  };
-  try {
-    await userService.addEvent(data);
-    response.status = 200;
-    response.body = 'success';
-  } catch (e) {
-    response.status = 401;
-    response.body = 'error';
+  let body = await request.body();
+  if (body.type === 'form-data') {
+    body = await request.body({ type: 'form-data' });
+    const formData = await body.value.read({});
+    const file = formData.files && formData.files[0];
+
+    if (file) {
+      const { filename, originalName, contentType } = file;
+      console.log(file, filename, contentType);
+
+      await Deno.rename(file.filename, `../images/${originalName}`);
+
+      ctx.response.body = {
+        success: true,
+        message: 'File uploaded successfully!',
+        details: { filename, contentType, size },
+      };
+    } else {
+      ctx.response.body = {
+        success: false,
+        message: 'No file uploaded.',
+      };
+    }
+    const params = await body.value;
+    const data = {
+      title: params.get('title'),
+      event_description: params.get('event_description'),
+      alcohol_options: params.get('alcohol_options'),
+      event_date: params.get('event_date'),
+      registration_starts: params.get('registration_starts'),
+      event_location: params.get('event_location'),
+      maximum_participants: params.get('maximum_participants'),
+    };
+    try {
+      await userService.addEvent(data);
+      response.status = 200;
+      response.body = 'success';
+    } catch (e) {
+      response.status = 401;
+      response.body = 'error';
+    }
   }
 };
 
