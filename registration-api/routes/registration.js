@@ -8,6 +8,7 @@ import {
   handleGetRegistered,
   handleGetRegisteredForEventId,
   handleCreateEvent,
+  handleGetEventImage,
 } from '../controllers/registrationController.js';
 import { processLogin } from '../controllers/loginController.js';
 import { checkAuth, logout } from '../controllers/authController.js';
@@ -68,6 +69,13 @@ router
       response: ctx.response,
       request: ctx.request,
       state: ctx.state,
+    });
+  })
+  .get('/eventImage/:id', ctx => {
+    const { id } = ctx.params;
+    return handleGetEventImage({
+      id: id,
+      response: ctx.response,
     });
   });
 

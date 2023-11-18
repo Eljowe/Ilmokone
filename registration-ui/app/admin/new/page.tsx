@@ -1,7 +1,29 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler, Controller, useFieldArray } from 'react-hook-form';
-import { Button, FieldError, Form, Input, Label, TextField, FileTrigger } from 'react-aria-components';
+import {
+  Button,
+  FieldError,
+  Form,
+  Input,
+  Label,
+  TextField,
+  FileTrigger,
+  DatePicker,
+  Calendar,
+  CalendarCell,
+  CalendarGrid,
+  DateInput,
+  DateSegment,
+  Dialog,
+  Group,
+  Header,
+  Heading,
+  Popover,
+  TimeField,
+  TimeValue,
+  DateValue,
+} from 'react-aria-components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useRouter } from 'next/navigation';
@@ -31,6 +53,8 @@ const NewEventPage: React.FC = () => {
   let [file, setFile] = useState<File[] | null>(null);
   let [fileName, setFileName] = useState<string[] | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [eventTime, setEventTime] = useState<TimeValue | null>(null);
+  const [eventDate, setEventDate] = useState<DateValue | null>(null);
 
   const router = useRouter();
 
@@ -57,16 +81,19 @@ const NewEventPage: React.FC = () => {
       setFileError('Image is too large');
       return;
     }
-    console.log('tries to submit');
-    console.log(data);
-    console.log(descriptionValue);
-    console.log(file);
+    console.log('trying to submit');
 
     const formData = new FormData();
     if (!file) return;
     formData.append('files', file[0]);
-    data = { ...data, event_picture: file[0].name };
     formData.append('description', JSON.stringify(descriptionValue));
+    formData.append('alcohol_options', JSON.stringify(data.alcohol_options));
+    formData.append('title', data.title);
+    formData.append('event_date', data.event_date);
+    formData.append('registration_starts', data.registration_starts);
+    formData.append('event_location', data.event_location);
+    formData.append('maximum_participants', JSON.stringify(data.maximum_participants));
+
     setFileError(null);
     return fetch('/api/addEvent', {
       method: 'POST',
@@ -125,11 +152,40 @@ const NewEventPage: React.FC = () => {
             {file && <span>{fileName}</span>}
             {fileError && <span className="text-red-600">Image is too large</span>}
           </div>
-
+          <DatePicker className="flex w-max flex-row space-x-2 border border-zinc-300 p-4">
+            <Label>Date</Label>
+            <Group className="flex w-full flex-row">
+              <DateInput className="flex w-max flex-row">{segment => <DateSegment segment={segment} />}</DateInput>
+              <Button className="rounded px-2 hover:bg-zinc-300">▼</Button>
+            </Group>
+            <Popover className="w-max border border-zinc-300 bg-zinc-100 p-4">
+              <Dialog>
+                <Calendar onChange={e => setEventDate(e)}>
+                  <header className="flex w-full justify-between">
+                    <Button slot="previous" className="rounded px-2 hover:bg-zinc-300">
+                      ◀
+                    </Button>
+                    <Heading />
+                    <Button slot="next" className="rounded px-2 hover:bg-zinc-300">
+                      ▶
+                    </Button>
+                  </header>
+                  <CalendarGrid>
+                    {date => <CalendarCell className="rounded p-2 hover:bg-zinc-300" date={date} />}
+                  </CalendarGrid>
+                </Calendar>
+              </Dialog>
+            </Popover>
+          </DatePicker>
+          <TimeField className="flex w-max flex-row space-x-2 border border-zinc-300 p-4" hourCycle={24} isRequired>
+            <Label className="break-keep">Time</Label>
+            <DateInput className="flex w-full flex-row">{segment => <DateSegment segment={segment} />}</DateInput>
+          </TimeField>
           <Button type="submit" className="cursor w-20 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-400">
             Submit
           </Button>
         </Form>
+        {eventDate && <span>{eventDate.toString()}</span>}
       </div>
     );
   }

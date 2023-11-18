@@ -43,7 +43,8 @@ const addEvent = async content => {
       event_date, 
       registration_starts, 
       event_location, 
-      maximum_participants) 
+      maximum_participants,
+      image_path) 
     VALUES 
     (${content.title}, 
       ${content.event_description}, 
@@ -51,7 +52,8 @@ const addEvent = async content => {
       ${content.event_date}, 
       ${content.registration_starts}, 
       ${content.event_location}, 
-      ${content.maximum_participants})`;
+      ${content.maximum_participants},
+      ${content.image_path})`;
     console.log('Added to database');
     return true;
   } catch (exception) {

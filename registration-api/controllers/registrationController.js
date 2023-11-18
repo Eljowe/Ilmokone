@@ -2,6 +2,7 @@ import { bcrypt } from '../deps.js';
 import * as userService from '../services/userService.js';
 import { validasaur } from '../deps.js';
 import * as registrationService from '../services/registrationService.js';
+import { multiParser } from 'https://deno.land/x/multiparser/mod.ts';
 
 const registrationValidationRules = {
   email: [validasaur.required, validasaur.isEmail],
@@ -70,7 +71,7 @@ const registerUser = async ({ request, response, state }) => {
   }
 };
 
-const baseDir = '../images';
+const SAVE_PATH = '../images';
 
 const handleCreateEvent = async ({ request, response, state }) => {
   if (!state.session.get('user')) {
@@ -78,47 +79,59 @@ const handleCreateEvent = async ({ request, response, state }) => {
     response.body = 'unauthorized';
     return;
   }
-  let body = await request.body();
-  if (body.type === 'form-data') {
-    body = await request.body({ type: 'form-data' });
-    const formData = await body.value.read({});
-    const file = formData.files && formData.files[0];
-
-    if (file) {
-      const { filename, originalName, contentType } = file;
-      console.log(file, filename, contentType);
-
-      await Deno.rename(file.filename, `../images/${originalName}`);
-
-      ctx.response.body = {
-        success: true,
-        message: 'File uploaded successfully!',
-        details: { filename, contentType, size },
-      };
-    } else {
-      ctx.response.body = {
-        success: false,
-        message: 'No file uploaded.',
-      };
-    }
-    const params = await body.value;
-    const data = {
-      title: params.get('title'),
-      event_description: params.get('event_description'),
-      alcohol_options: params.get('alcohol_options'),
-      event_date: params.get('event_date'),
-      registration_starts: params.get('registration_starts'),
-      event_location: params.get('event_location'),
-      maximum_participants: params.get('maximum_participants'),
-    };
+  try {
+    await Deno.mkdir(SAVE_PATH, { recursive: true });
+    console.log(`Directory exists or was created successfully: ${Deno.realPathSync(SAVE_PATH)}`);
+  } catch (e) {
+    console.error('Error creating directory:', e);
+  }
+  const form = await multiParser(request.originalRequest.request);
+  if (form) {
     try {
-      await userService.addEvent(data);
+      const originalFilename = form.files['files'].filename;
+      const fileExt = originalFilename.substring(originalFilename.lastIndexOf('.'));
+      const uniqueFilename = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}${fileExt}`;
+
+      const data = {
+        title: form.fields['title'],
+        event_description: form.fields['description'],
+        event_location: form.fields['event_location'],
+        event_date: form.fields['event_date'],
+        registration_start: form.fields['registration_start'],
+        maximum_participants: form.fields['maximum_participants'],
+        alcohol_options: form.fields['alcohol_options'],
+        image_path: uniqueFilename,
+      };
+      try {
+        await registrationService.addEvent(data);
+        response.status = 200;
+        await Deno.writeFile(`${SAVE_PATH}/${uniqueFilename}`, form.files['files'].content);
+        console.log('File saved to server with unique filename:', uniqueFilename);
+      } catch (e) {
+        console.error(e);
+        response.status = 500;
+      }
       response.status = 200;
-      response.body = 'success';
     } catch (e) {
-      response.status = 401;
-      response.body = 'error';
+      console.error(e);
+      response.status = 500;
     }
+  }
+};
+
+const handleGetEventImage = async ({ response, id }) => {
+  try {
+    const data = await registrationService.findEvent(id);
+    const filePath = `${SAVE_PATH}/${data.image_path}`;
+    const headers = new Headers();
+    headers.set('Content-Disposition', `attachment; filename="${data.image_path}"`);
+    const body = await Deno.readFile(filePath);
+    response.status = 200;
+    response.body = body;
+    response.headers = headers;
+  } catch (e) {
+    response.status = 500;
+    response.body = 'error: no event by id';
   }
 };
 
@@ -129,4 +142,5 @@ export {
   handleGetRegistered,
   handleGetRegisteredForEventId,
   handleCreateEvent,
+  handleGetEventImage,
 };

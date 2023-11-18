@@ -67,6 +67,9 @@ export default function Event({ params }: Props) {
             event_location: response[0].event_location,
           });
         });
+      fetch(`api/eventImage/${slug}`).then(response => {
+        console.log(response);
+      });
     } catch (e) {
       return;
     }
@@ -79,7 +82,7 @@ export default function Event({ params }: Props) {
           <div className="relative flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 rounded-xl bg-gray-50 px-4 py-20 sm:px-10">
             <a
               href="/admin"
-              className="absolute left-0 top-0 m-4 w-20 transform cursor-pointer text-center text-blue-500 underline duration-500"
+              className="absolute left-0 top-0 m-4 w-20 transform cursor-pointer text-center text-blue-500 duration-500 hover:underline"
             >
               Back
             </a>

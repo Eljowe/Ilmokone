@@ -6,7 +6,8 @@ CREATE TABLE events (
   event_date TEXT NOT NULL,
   registration_starts TEXT NOT NULL,
   event_location TEXT,
-  maximum_participants INTEGER
+  maximum_participants INTEGER,
+  image_path TEXT
 );
 
 CREATE TABLE event_registrations (
