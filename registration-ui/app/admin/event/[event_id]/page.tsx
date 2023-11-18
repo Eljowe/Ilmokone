@@ -23,12 +23,14 @@ interface Event {
   registration_start: string;
   event_location?: string;
   maximum_participants?: number;
+  event_image_url?: string;
 }
 
 export default function Event({ params }: Props) {
   const [authorized, setAuthorized] = useState<Boolean>(false);
   const slug = params.event_id;
   const [event, setEvent] = useState<Event | null>(null);
+  const [imageSrc, setImageSrc] = useState<null | string>(null);
 
   const router = useRouter();
 
@@ -65,15 +67,33 @@ export default function Event({ params }: Props) {
             date: response[0].event_date,
             registration_start: response[0].registration_starts,
             event_location: response[0].event_location,
+            event_image_url: response[0].image_path,
           });
         });
-      fetch(`api/eventImage/${slug}`).then(response => {
-        console.log(response);
-      });
     } catch (e) {
       return;
     }
   }, [slug, router]);
+
+  useEffect(() => {
+    const fetchEventImage = async () => {
+      try {
+        const response = await fetch(`/api/eventImage/${slug}`);
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setImageSrc(imageUrl);
+      } catch (e) {
+        return;
+      }
+    };
+    fetchEventImage();
+
+    return () => {
+      if (imageSrc) {
+        URL.revokeObjectURL(imageSrc);
+      }
+    };
+  }, [slug]);
 
   if (authorized) {
     return (
@@ -87,6 +107,7 @@ export default function Event({ params }: Props) {
               Back
             </a>
             <h1 className="text-2xl font-bold">{event.title}</h1>
+            {imageSrc && <img className="max-h-[200px] max-w-[200px] rounded" src={imageSrc} alt="Event Image" />}
             <div className="flex w-full flex-col justify-center space-y-4 pt-10 sm:flex-row sm:space-x-4 sm:space-y-0">
               <div className="w-max-[800px] flex flex-col space-y-4 rounded-xl p-4 hover:border hover:border-blue-500 sm:w-full sm:min-w-[300px]">
                 <p>{event.description}</p>

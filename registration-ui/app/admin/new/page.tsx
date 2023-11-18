@@ -121,6 +121,12 @@ const NewEventPage: React.FC = () => {
   if (authorized) {
     return (
       <div className="flex h-screen w-screen flex-col items-center justify-center p-4">
+        <a
+          href="/admin"
+          className="absolute left-0 top-0 m-4 w-20 transform cursor-pointer text-center text-blue-500 duration-500 hover:underline"
+        >
+          Back
+        </a>
         <h1>Create New Event</h1>
         <Form
           onSubmit={handleSubmit(onSubmit)}

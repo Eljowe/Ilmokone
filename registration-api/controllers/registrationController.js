@@ -105,14 +105,13 @@ const handleCreateEvent = async ({ request, response, state }) => {
       console.log(data);
       try {
         await registrationService.addEvent(data);
-        response.status = 200;
         await Deno.writeFile(`${SAVE_PATH}/${uniqueFilename}`, form.files['files'].content);
+        response.status = 200;
         console.log('File saved to server with unique filename:', uniqueFilename);
       } catch (e) {
         console.error(e);
         response.status = 500;
       }
-      response.status = 200;
     } catch (e) {
       console.error(e);
       response.status = 500;
@@ -121,11 +120,13 @@ const handleCreateEvent = async ({ request, response, state }) => {
 };
 
 const handleGetEventImage = async ({ response, id }) => {
+  console.log('id', id);
   try {
     const data = await registrationService.findEvent(id);
-    const filePath = `${SAVE_PATH}/${data.image_path}`;
+    console.log(data[0].image_path);
+    const filePath = `${SAVE_PATH}/${data[0].image_path}`;
     const headers = new Headers();
-    headers.set('Content-Disposition', `attachment; filename="${data.image_path}"`);
+    headers.set('Content-Disposition', `attachment; filename="${data[0].image_path}"`);
     const body = await Deno.readFile(filePath);
     response.status = 200;
     response.body = body;

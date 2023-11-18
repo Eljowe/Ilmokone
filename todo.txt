@@ -13,4 +13,4 @@
 
 5. Deploying
 
- 
+6. before new event submit, popup asking if all data is correct
