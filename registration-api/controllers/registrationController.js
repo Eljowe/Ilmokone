@@ -97,11 +97,12 @@ const handleCreateEvent = async ({ request, response, state }) => {
         event_description: form.fields['description'],
         event_location: form.fields['event_location'],
         event_date: form.fields['event_date'],
-        registration_start: form.fields['registration_start'],
+        registration_starts: form.fields['registration_starts'],
         maximum_participants: form.fields['maximum_participants'],
         alcohol_options: form.fields['alcohol_options'],
         image_path: uniqueFilename,
       };
+      console.log(data);
       try {
         await registrationService.addEvent(data);
         response.status = 200;
