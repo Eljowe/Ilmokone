@@ -1,8 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, set } from 'react-hook-form';
 import { Button, FieldError, Form, Input, Label, TextField } from 'react-aria-components';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 type Props = {
   params: {
@@ -31,6 +34,7 @@ export default function Event({ params }: Props) {
   const slug = params.event_id;
   const [event, setEvent] = useState<Event | null>(null);
   const [imageSrc, setImageSrc] = useState<null | string>(null);
+  const [descriptionValue, setDescriptionValue] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -79,10 +83,15 @@ export default function Event({ params }: Props) {
     const fetchEventImage = async () => {
       try {
         const response = await fetch(`/api/eventImage/${slug}`);
+        if (response.status != 200) {
+          setImageSrc(null);
+          return;
+        }
         const blob = await response.blob();
         const imageUrl = URL.createObjectURL(blob);
         setImageSrc(imageUrl);
       } catch (e) {
+        setImageSrc(null);
         return;
       }
     };
@@ -97,7 +106,7 @@ export default function Event({ params }: Props) {
 
   if (authorized) {
     return (
-      <main className="flex min-h-screen w-screen flex-col items-center justify-start p-4">
+      <main className="flex min-h-screen w-full flex-col items-center justify-start p-4">
         {event ? (
           <div className="relative flex h-full w-full max-w-[1200px] flex-col items-center justify-center space-y-10 rounded-xl bg-gray-50 px-4 py-20 sm:px-10">
             <a
@@ -106,11 +115,25 @@ export default function Event({ params }: Props) {
             >
               Back
             </a>
-            <h1 className="text-2xl font-bold">{event.title}</h1>
-            {imageSrc && <img className="max-h-[200px] max-w-[200px] rounded" src={imageSrc} alt="Event Image" />}
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-bold">{event.title}</h1>
+              {imageSrc && (
+                <Image
+                  width={800}
+                  height={500}
+                  className="max-h-[400px] max-w-[400px] rounded"
+                  src={imageSrc}
+                  alt="Event Image"
+                />
+              )}
+            </div>
             <div className="flex w-full flex-col justify-center space-y-4 pt-10 sm:flex-row sm:space-x-4 sm:space-y-0">
-              <div className="w-max-[800px] flex flex-col space-y-4 rounded-xl p-4 hover:border hover:border-blue-500 sm:w-full sm:min-w-[300px]">
-                <p>{event.description}</p>
+              <div className="w-max-[800px] flex flex-col space-y-4 rounded-xl sm:w-full sm:min-w-[300px]">
+                <ReactQuill
+                  theme="snow"
+                  defaultValue={event.description.replace(/"/g, '')}
+                  onChange={setDescriptionValue}
+                />
               </div>
               <div className="flex w-full flex-col justify-between rounded-xl border border-zinc-400 p-4 hover:border-blue-500 sm:w-full">
                 <span>When: {event.date}</span>
@@ -146,6 +169,7 @@ export default function Event({ params }: Props) {
                 </Button>
               </Form>
             </div>
+
             {event?.participants && <p>Participants</p>}
           </div>
         ) : (

@@ -50,8 +50,8 @@ const NewEventPage: React.FC = () => {
   const [authorized, setAuthorized] = useState<Boolean>(false);
   const [descriptionValue, setDescriptionValue] = useState<string | null>(null);
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
-  let [file, setFile] = useState<File[] | null>(null);
-  let [fileName, setFileName] = useState<string[] | null>(null);
+  const [file, setFile] = useState<File[] | null>(null);
+  const [fileName, setFileName] = useState<string[] | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [eventTime, setEventTime] = useState<TimeValue | null>(null);
   const [eventDate, setEventDate] = useState<DateValue | null>(null);
@@ -144,9 +144,9 @@ const NewEventPage: React.FC = () => {
             <FieldError />
           </TextField>
           {errors.title && <span className="text-red-600">Event title is required</span>}
-          <TextField name="description" isRequired className="flex flex-col">
+          <TextField name="description" isRequired className="flex flex-col pb-8">
             <Label>Event description</Label>
-            <ReactQuill theme="snow" onChange={setDescriptionValue} />;
+            <ReactQuill theme="snow" onChange={setDescriptionValue} />
             <FieldError />
           </TextField>
           {descriptionError && <span className="text-red-600">Event description is required</span>}
