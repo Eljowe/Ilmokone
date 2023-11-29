@@ -27,6 +27,7 @@ import {
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 type Inputs = {
   title: string;
@@ -94,8 +95,9 @@ const NewEventPage: React.FC = () => {
     console.log('trying to submit');
 
     const formData = new FormData();
-    if (!file) return;
-    formData.append('files', file[0]);
+    if (file) {
+      formData.append('files', file[0]);
+    }
     formData.append('description', JSON.stringify(descriptionValue));
     formData.append('alcohol_options', JSON.stringify(data.alcohol_options));
     formData.append('title', data.title);
@@ -104,15 +106,15 @@ const NewEventPage: React.FC = () => {
     formData.append('event_location', data.event_location);
     formData.append('maximum_participants', JSON.stringify(data.maximum_participants));
 
-    console.log(formData);
-
     setFileError(null);
     return fetch('/api/addEvent', {
       method: 'POST',
       body: formData,
     }).then(response => {
       if (response.ok) {
+        toast.success('Successfully toasted!');
         console.log('success');
+        router.push('/admin');
       } else {
         console.log('error');
       }
@@ -153,9 +155,7 @@ const NewEventPage: React.FC = () => {
           {errors.event_description && <span>Event description is required</span>}
           <div className="flex w-full flex-col">
             <FileTrigger
-              {...register('event_picture', {
-                required: 'Event picture is required',
-              })}
+              {...register('event_picture')}
               onSelect={e => {
                 let files = Array.from(e as FileList);
                 setFile(files);

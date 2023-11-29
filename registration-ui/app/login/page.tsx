@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, FieldError, Form, Input, Label, TextField } from 'react-aria-components';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 type Inputs = {
   password: string;
@@ -46,10 +47,15 @@ export default function Page() {
       });
       console.log(response.status);
       if (response.status == 200) {
+        toast.success('Login successful');
         router.push('/admin');
+      } else {
+        toast.error('Login failed');
+        setErrorMsg('login failed');
       }
     } catch (error) {
       console.error('Error:', error);
+      toast.error('Login failed');
       setErrorMsg('login failed');
     }
   };

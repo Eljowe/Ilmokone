@@ -36,7 +36,6 @@ const addEvent = async content => {
     if (!content) {
       return null;
     }
-    console.log(content);
     await sql`INSERT INTO events 
     (title, 
       event_description, 
@@ -54,7 +53,7 @@ const addEvent = async content => {
       ${content.registration_starts}, 
       ${content.event_location}, 
       ${content.maximum_participants != 'undefined' ? content.maximum_participants : null},
-      ${content.image_path})`;
+      ${content.image_path != 'undefined' ? content.image_path : null})`;
     console.log('Added to database');
     return true;
   } catch (exception) {

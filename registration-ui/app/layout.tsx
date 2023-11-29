@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,7 +15,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Arimo&display=swap" rel="stylesheet" />
       </head>
-      <body>{children}</body>
+      <body>
+        <Toaster />
+        {children}
+      </body>
     </html>
   );
 }

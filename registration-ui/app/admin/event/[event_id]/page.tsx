@@ -95,14 +95,15 @@ export default function Event({ params }: Props) {
         return;
       }
     };
-    fetchEventImage();
-
+    if (event?.event_image_url) {
+      fetchEventImage();
+    }
     return () => {
       if (imageSrc) {
         URL.revokeObjectURL(imageSrc);
       }
     };
-  }, [slug]);
+  }, [event]);
 
   if (authorized) {
     return (

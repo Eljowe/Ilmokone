@@ -88,10 +88,12 @@ const handleCreateEvent = async ({ request, response, state }) => {
   const form = await multiParser(request.originalRequest.request);
   if (form) {
     try {
-      const originalFilename = form.files['files'].filename;
-      const fileExt = originalFilename.substring(originalFilename.lastIndexOf('.'));
-      const uniqueFilename = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}${fileExt}`;
-
+      var uniqueFilename = null;
+      if (form.files['files']) {
+        const originalFilename = form.files['files'].filename;
+        const fileExt = originalFilename.substring(originalFilename.lastIndexOf('.'));
+        uniqueFilename = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}${fileExt}`;
+      }
       const data = {
         title: form.fields['title'],
         event_description: form.fields['description'],
@@ -103,11 +105,14 @@ const handleCreateEvent = async ({ request, response, state }) => {
         image_path: uniqueFilename,
       };
       console.log(data);
+
       try {
         await registrationService.addEvent(data);
-        await Deno.writeFile(`${SAVE_PATH}/${uniqueFilename}`, form.files['files'].content);
+        if (uniqueFilename) {
+          await Deno.writeFile(`${SAVE_PATH}/${uniqueFilename}`, form.files['files'].content);
+          console.log('File saved to server with unique filename:', uniqueFilename);
+        }
         response.status = 200;
-        console.log('File saved to server with unique filename:', uniqueFilename);
       } catch (e) {
         console.error(e);
         response.status = 500;
