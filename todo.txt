@@ -2,7 +2,7 @@
     - Use i18n
 
 2. Registration mechanics
-    - Registration start time check
+    - Registration start time check/tests
     - Data integrity check
 
 3. Form options

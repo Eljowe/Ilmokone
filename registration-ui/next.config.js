@@ -8,6 +8,10 @@ const nextConfig = {
     return config;
   },
   distDir: 'build',
+  i18n: {
+    locales: ['en-US', 'fi'],
+    defaultLocale: 'en-US',
+  },
 };
 
 module.exports = nextConfig;

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,6 +18,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Toaster />
+        <div className="flex w-full justify-end gap-2 px-4 py-2 text-blue-500">
+          <Link locale="en" href="/">
+            To English
+          </Link>
+          <Link locale="fi" href="/">
+            To Finnish
+          </Link>
+        </div>
         {children}
       </body>
     </html>
